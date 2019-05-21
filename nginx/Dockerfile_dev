@@ -1,0 +1,35 @@
+FROM staticfloat/nginx-certbot
+
+ENV LANG C.UTF-8
+# 指定時區，否則會用 GMT
+ENV TZ Asia/Taipei
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+
+ENV APP_HOME /home/app/rails-app
+
+WORKDIR $APP_HOME
+
+# create log directory
+RUN mkdir log
+RUN mkdir -p /etc/letsencrypt/live/sso.lovefunthing.com
+
+# copy over static assets
+COPY nginx/public public/
+COPY nginx/secret secret/
+
+COPY nginx/secret/ssl_certificates/sso.lovefunthing.com.crt /etc/letsencrypt/live/sso.lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/sso.lovefunthing.com.key /etc/letsencrypt/live/sso.lovefunthing.com/privkey.pem
+
+# COPY nginx/sso.local.conf /tmp/docker.nginx
+COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx
+
+# COPY nginx/sso.local.conf /etc/nginx/conf.d/nginx.conf
+RUN envsubst '$APP_HOME' < /tmp/sso.nginx > /etc/nginx/conf.d/sso.lovefunthing.com.conf
+
+EXPOSE 80
+
+# CMD [ "service nginx start" ]
+
+# Use the "exec" form of CMD so Nginx shuts down gracefully on SIGTERM (i.e. `docker stop`)
+CMD [ "nginx-debug", "-g", "daemon off;" ]
