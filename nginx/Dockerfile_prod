@@ -15,7 +15,6 @@ RUN mkdir log
 
 # copy over static assets
 COPY nginx/public public/
-COPY nginx/secret secret/
 
 # COPY nginx/sso.local.conf /tmp/docker.nginx
 COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx
