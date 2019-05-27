@@ -17,7 +17,10 @@ services:
     ports:
       - "6379:6379"
   sso:
-    image: calvinchu/pcloud-sso-dockerize
+    build:
+      context: .
+      dockerfile: ./pcloud-sso/Dockerfile
+    # image: calvinchu/pcloud-sso-dockerize
     container_name: sso
     command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
@@ -41,7 +44,7 @@ services:
       - /tmp/unicorn:/tmp/unicorn
     #   - /opt/log/nginx:/var/log/nginx
     #   - /opt/nginx/conf.d:/etc/nginx/conf.d
-    #   - /opt/letsencrypt:/etc/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt
     restart: always
     depends_on: 
       - sso
