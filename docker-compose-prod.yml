@@ -50,6 +50,7 @@ services:
       - db
       - redis
       - nginx
+      - bots
   bots:
     # build:
     #   context: .
