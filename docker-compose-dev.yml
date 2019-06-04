@@ -14,6 +14,8 @@ services:
     image: redis
     container_name: redis
     restart: always
+    volumes:
+      - ./redis/data:/data
     ports:
       - "6379:6379"
   sso:
@@ -46,12 +48,27 @@ services:
     depends_on:
       - db
       - redis
-  web:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile_dev
-    # image: nginx-certbot
-    container_name: web
+  bots:
+    # build:
+    #   context: .
+    #   dockerfile: ./pcloud-bots/Dockerfile
+    image: calvinchu/pcloud-bots-dockerize
+    container_name: bots
+    command: bash -c "dockerize -wait tcp://db:3306 -wait tcp://mongooseim:5222 -timeout 1m && sh ./start.sh"
+    env_file: .env
+    volumes:
+      - ./pcloud-bots:/home/app/rails-app
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+      - mongooseim    
+  nginx:
+    # build:
+    #   context: .
+    #   dockerfile: ./nginx/Dockerfile_dev
+    image: calvinchu/pcloud-nginx-dockerize
+    container_name: nginx
     ports:
       - 80:80
       - 443:443
@@ -66,9 +83,10 @@ services:
       - portal
     env_file: .env
   mongooseim:
-    build:
-      context: .
-      dockerfile: ./mongooseim/Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: ./mongooseim/Dockerfile
+    image: calvinchu/pcloud-mongooseim-dockerize
     container_name: mongooseim
     env_file: .env
     volumes:
