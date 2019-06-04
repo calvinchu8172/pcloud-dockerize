@@ -77,13 +77,7 @@ services:
       - 443:443
     volumes:
       - /tmp/unicorn:/tmp/unicorn
-    #   - /opt/log/nginx:/var/log/nginx
-    #   - /opt/nginx/conf.d:/etc/nginx/conf.d
-    #   - /opt/letsencrypt:/etc/letsencrypt
     restart: always
-    # depends_on: 
-    #   - sso
-    #   - portal
     env_file: .env
   mongooseim:
     # build:
