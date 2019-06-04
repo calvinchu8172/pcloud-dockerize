@@ -11,16 +11,18 @@ ENV APP_HOME /home/app/rails-app
 WORKDIR $APP_HOME
 
 # create log directory
-RUN mkdir log
+RUN mkdir -p log/sso log/portal
 
 # copy over static assets
 COPY nginx/public public/
 
 # COPY nginx/sso.local.conf /tmp/docker.nginx
 COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx
+COPY nginx/portal.lovefunthing.com.conf /tmp/portal.nginx
 
 # COPY nginx/sso.local.conf /etc/nginx/conf.d/nginx.conf
 RUN envsubst '$APP_HOME' < /tmp/sso.nginx > /etc/nginx/conf.d/sso.lovefunthing.com.conf
+RUN envsubst '$APP_HOME' < /tmp/portal.nginx > /etc/nginx/conf.d/portal.lovefunthing.com.conf
 
 EXPOSE 80
 

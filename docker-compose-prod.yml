@@ -14,13 +14,15 @@ services:
     image: redis
     container_name: redis
     restart: always
+    volumes:
+      - ./redis/data:/data
     ports:
       - "6379:6379"
   sso:
-    build:
-      context: .
-      dockerfile: ./pcloud-sso/Dockerfile
-    # image: calvinchu/pcloud-sso-dockerize
+    # build:
+    #   context: .
+    #   dockerfile: ./pcloud-sso/Dockerfile
+    image: calvinchu/pcloud-sso-dockerize
     container_name: sso
     command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
@@ -31,12 +33,42 @@ services:
     depends_on:
       - db
       - redis
-  web:
-    image: nginx-certbot
-    container_name: web
+  portal:
+    # build:
+    #   context: .
+    #   dockerfile: ./pcloud-portal/Dockerfile
+    image: calvinchu/pcloud-portal-dockerize
+    container_name: portal
+    command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
+    env_file: .env
+    volumes:
+      - ./pcloud-portal:/home/app/rails-app
+      - /tmp/unicorn:/tmp/unicorn
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+  bots:
+    # build:
+    #   context: .
+    #   dockerfile: ./pcloud-bots/Dockerfile
+    image: calvinchu/pcloud-bots-dockerize
+    container_name: bots
+    command: bash -c "dockerize -wait tcp://db:3306 -wait tcp://mongooseim:5222 -timeout 1m && sh ./start.sh"
+    env_file: .env
+    volumes:
+      - ./pcloud-bots:/home/app/rails-app
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+      - mongooseim    
+  nginx:
     build:
       context: .
       dockerfile: ./nginx/Dockerfile_prod
+    # image: calvinchu/pcloud-nginx-dockerize
+    container_name: nginx
     ports:
       - 80:80
       - 443:443
@@ -48,4 +80,25 @@ services:
     restart: always
     depends_on: 
       - sso
+      - portal
     env_file: .env
+  mongooseim:
+    # build:
+    #   context: .
+    #   dockerfile: ./mongooseim/Dockerfile
+    image: calvinchu/pcloud-mongooseim-dockerize
+    container_name: mongooseim
+    env_file: .env
+    volumes:
+      - ./mongooseim/log:/data/log
+      - ./mongooseim/mnesia:/data/mnesia
+    ports:
+      - 5222:5222
+      - 5280:5280
+      - 5269:5269
+      - 4369:4369
+      - 9100:9100
+    depends_on:
+      - db
+      - redis
+
