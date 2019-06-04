@@ -33,6 +33,7 @@ services:
     depends_on:
       - db
       - redis
+      - nginx
   portal:
     # build:
     #   context: .
@@ -48,6 +49,7 @@ services:
     depends_on:
       - db
       - redis
+      - nginx
   bots:
     # build:
     #   context: .
@@ -78,9 +80,9 @@ services:
     #   - /opt/nginx/conf.d:/etc/nginx/conf.d
     #   - /opt/letsencrypt:/etc/letsencrypt
     restart: always
-    depends_on: 
-      - sso
-      - portal
+    # depends_on: 
+    #   - sso
+    #   - portal
     env_file: .env
   mongooseim:
     # build:
