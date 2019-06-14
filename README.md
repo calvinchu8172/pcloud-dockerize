@@ -35,7 +35,7 @@
 4. Add pcloud-sso/config/database.yml
    1. database.yml should includes mysql db and xmpp_db settings
 5. Add pcloud-sso/config/mailer.yml
-6. `mkdir pcloud-sso/tmp/pids`
+6. `mkdir -p pcloud-sso/tmp/pids`
 
 ##Portal and API Server
 
@@ -45,7 +45,7 @@
 4. Add pcloud-portal/config/database.yml
    1. database.yml should includes mysql db and xmpp_db settings
 5. Add pcloud-portal/config/mailer.yml
-6. `mkdir pcloud-portal/tmp/pids`
+6. `mkdir -p pcloud-portal/tmp/pids`
 7. Post device/3/register API to register device. Which is recorded in POSTMAN. 
 8. Import `categories`, `certificates`, `devices`, `domains` and  `products`tables from local Database to `pcloud_production` database.
 
@@ -60,7 +60,7 @@
 7. Add pcloud-bots/config/bot_route_config.yml
 8. Add pcloud-bots/config/bot_xmpp_db_config.yml
 9. Add pcloud-bots/config/god_config.yml
-10. `mkdir pcloud-bots/log`
+10. `mkdir -p pcloud-bots/log`
 11. Import `user` and `last` table which includes device and bots accounts to` mongooseim_production` database.
 
 ##MongooseIM (XMPP Server)
