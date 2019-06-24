@@ -79,7 +79,7 @@
 
 ##Cerbot
 
-1. If want to add another domain, excute `sudo cerbot --certonly`.
+1. If want to add another domain, excute `sudo certbot --certonly`.
    1. Choose 1. nginx
    2. Enter another domain you want, like portal.lovefunthing.com.
 
