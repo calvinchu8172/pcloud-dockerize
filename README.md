@@ -67,6 +67,16 @@
 
 1. Add mongoosein/config/ejabberd.cfg
 
+##Dureading
+
+1. `git clone git@github.com:calvinchu8172/dureading-dockerize.git`
+2. `mv dureading-dockerize dureading`
+3. Add dureading/config/settings/bot_db_config.yml
+4. Add dureading/config/database.yml
+5. `mkdir -p dureading/tmp/pids`
+6. `docker-compose -f docker-compose-prod.yml run rake db:create db:migrate db:seed`
+
+
 ##Cerbot
 
 1. If want to add another domain, excute `sudo cerbot --certonly`.
