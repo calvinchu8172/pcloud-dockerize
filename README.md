@@ -79,9 +79,11 @@
 
 ##Cerbot
 
-1. If want to add another domain, excute `sudo certbot --certonly`.
-   1. Choose 1. nginx
-   2. Enter another domain you want, like portal.lovefunthing.com.
+1. If you want to add another domain, excute `sudo certbot certonly`.
+2. Establish your domain in AWS Route53 first. Otherwise, you will get authorization error because Certbot cannot verify the domain.
+3. Choose 1. nginx
+4. Enter another domain you want, like portal.lovefunthing.com.
+5. Everytime establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 443 port is occupied.
 
 ##Sequence(Production)
 
