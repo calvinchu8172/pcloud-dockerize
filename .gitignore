@@ -1,0 +1,8 @@
+.env
+nginx/secret
+nginx/log
+mongooseim/log
+mongooseim/mnesia
+mongooseim/config/ejabberd.cfg
+redis
+!README.md
