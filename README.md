@@ -71,11 +71,22 @@
 
 1. `git clone git@github.com:calvinchu8172/dureading-dockerize.git`
 2. `mv dureading-dockerize dureading`
-3. Add dureading/config/settings/bot_db_config.yml
+3. Add dureading/config/settings/production.yml
 4. Add dureading/config/database.yml
 5. `mkdir -p dureading/tmp/pids`
-6. `docker-compose -f docker-compose-prod.yml run rake db:create db:migrate db:seed`
+6. Add necessary environment variables in .env file.
+7. `docker-compose -f docker-compose-prod.yml run rake db:create db:migrate db:seed`
 
+
+##PCStore
+
+1. `git clone git@github.com:calvinchu8172/pcstore-dockerize.git`
+2. `mv pcstore-dockerize pcstore`
+3. Add pcstore/config/settings/production.yml
+4. Add pcstore/config/database.yml
+5. `mkdir -p pcstore/tmp/pids`
+6. Add necessary environment variables in .env file.
+7. `docker-compose -f docker-compose-prod.yml run rake db:create db:migrate db:seed`
 
 ##Cerbot
 
