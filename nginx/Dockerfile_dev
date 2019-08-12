@@ -18,14 +18,14 @@ RUN mkdir -p /etc/letsencrypt/live/{sso.lovefunthing.com,portal.lovefunthing.com
 COPY nginx/public public/
 COPY nginx/secret secret/
 
-COPY nginx/secret/ssl_certificates/sso.lovefunthing.com.crt /etc/letsencrypt/live/sso.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/sso.lovefunthing.com.key /etc/letsencrypt/live/sso.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/portal.lovefunthing.com.crt /etc/letsencrypt/live/portal.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/portal.lovefunthing.com.key /etc/letsencrypt/live/portal.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/dureading.lovefunthing.com.crt /etc/letsencrypt/live/dureading.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/dureading.lovefunthing.com.key /etc/letsencrypt/live/dureading.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/pcstore.lovefunthing.com.crt /etc/letsencrypt/live/pcstore.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/pcstore.lovefunthing.com.key /etc/letsencrypt/live/pcstore.lovefunthing.com/privkey.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/sso.lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/sso.lovefunthing.com/privkey.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/portal.lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/portal.lovefunthing.com/privkey.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/dureading.lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/dureading.lovefunthing.com/privkey.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/pcstore.lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/pcstore.lovefunthing.com/privkey.pem
 
 
 COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx
