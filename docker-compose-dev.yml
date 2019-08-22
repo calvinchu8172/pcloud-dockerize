@@ -19,15 +19,16 @@ services:
     ports:
       - "6379:6379"
   sso:
-    # build:
-    #   context: .
-    #   dockerfile: ./pcloud-sso/Dockerfile
-    image: calvinchu/pcloud-sso-dockerize
+    build:
+      context: .
+      dockerfile: ./pcloud-sso/Dockerfile
+    # image: calvinchu/pcloud-sso-dockerize
     container_name: sso
     command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
     volumes:
-      - ./pcloud-sso:/home/app/rails-app
+      # - ./pcloud-sso:/home/app/rails-app
+      - ./pcloud-sso/log:/home/app/rails-app/log
       - /tmp/unicorn:/tmp/unicorn
     restart: on-failure
     depends_on:
@@ -35,15 +36,16 @@ services:
       - redis
       - nginx
   portal:
-    # build:
-    #   context: .
-    #   dockerfile: ./pcloud-portal/Dockerfile
-    image: calvinchu/pcloud-portal-dockerize
+    build:
+      context: .
+      dockerfile: ./pcloud-portal/Dockerfile
+    # image: calvinchu/pcloud-portal-dockerize
     container_name: portal
     command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
     volumes:
-      - ./pcloud-portal:/home/app/rails-app
+      # - ./pcloud-portal:/home/app/rails-app
+      - ./pcloud-portal/log:/home/app/rails-app/log
       - /tmp/unicorn:/tmp/unicorn
     restart: on-failure
     depends_on:
@@ -60,7 +62,8 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid unicorn.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
     volumes:
-      - ./dureading:/home/app/rails-app
+      # - ./dureading:/home/app/rails-app
+      - ./dureading/log:/home/app/rails-app/log
       - /tmp/unicorn:/tmp/unicorn
     restart: on-failure
     depends_on:
@@ -75,22 +78,23 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid unicorn.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
     volumes:
-      - ./pcstore:/home/app/rails-app
+      # - ./pcstore:/home/app/rails-app
+      - ./pcstore/log:/home/app/rails-app/log
       - /tmp/unicorn:/tmp/unicorn
     restart: on-failure
     depends_on:
       - db
       - nginx
   bots:
-    # build:
-    #   context: .
-    #   dockerfile: ./pcloud-bots/Dockerfile
-    image: calvinchu/pcloud-bots-dockerize
+    build:
+      context: .
+      dockerfile: ./pcloud-bots/Dockerfile
+    # image: calvinchu/pcloud-bots-dockerize
     container_name: bots
     command: bash -c "dockerize -wait tcp://db:3306 -wait tcp://mongooseim:5222 -timeout 1m && sh ./start.sh"
     env_file: .env
     volumes:
-      - ./pcloud-bots:/home/app/rails-app
+      - ./pcloud-bots/log:/home/app/rails-app/log
     restart: on-failure
     depends_on:
       - db
@@ -106,8 +110,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - /tmp/unicorn:/tmp/unicorn
       - ./nginx/log:/home/app/rails-app/log
+      - /tmp/unicorn:/tmp/unicorn
     restart: always
     env_file: .env
   mongooseim:
