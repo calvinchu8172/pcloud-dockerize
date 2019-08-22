@@ -1,8 +1,8 @@
 # Pcloud-dockerize
 
-##Production Environment
+## Production Environment
 
-##Cloud Server Prerequisite
+## Cloud Server Prerequisite
 
 1. Create user calvinchu(or other username) 
    
@@ -71,8 +71,7 @@
     2. `sudo mkdir -p log/dureading log/pcstore log/portal log/sso`
 12. `docker-compose -f docker-compose-prod.yml up`
 
-
-##Cerbot(currently using wildcard, this is no need.)
+## Cerbot (currently using wildcard, this is no need.)
 
 1. If you want to add another domain, excute `sudo certbot certonly`.
 2. Establish your domain in AWS Route53 first. Otherwise, you will get authorization error because Certbot cannot verify the domain.
