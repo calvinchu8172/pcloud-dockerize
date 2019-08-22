@@ -12,10 +12,11 @@
    
    1. [https://git-scm.com/book/zh-tw/v1/%E9%96%8B%E5%A7%8B-%E5%AE%89%E8%A3%9D-Git](https://git-scm.com/book/zh-tw/v1/開始-安裝-Git)
    
-3. Edit ~/.gitconfig under **calvinchu user**
-   4. https://gist.github.com/calvinchu8172/186bdb3a9266eb2dde20e5e9b649cb41
+3. Edit `~/.gitconfig` under **calvinchu user**
 
-4. Edit ~/.bash_profile under **calvinchu user**
+   1. https://gist.github.com/calvinchu8172/186bdb3a9266eb2dde20e5e9b649cb41
+
+4. Edit` ~/.bash_profile` under **calvinchu user**
 
    1. https://gist.github.com/calvinchu8172/ad759d95379d6a1e27bbac61a82fd3b3
 
@@ -42,15 +43,13 @@
 
    3. https://caloskao.org/ubuntu-use-certbot-to-automatically-update-lets-encrypt-certificate-authority/
 
-   4. The  ~/.aws/config of Route53 AWS access key is added under **root user**  folder.
+   4. The  `~/.aws/config` of Route53 AWS access key is added under **root user**  folder.
 
-      1. 
-
-         ```bash
-         [default]
-         aws_access_key_id=AWSACCESSKEYEXAMPLE
-         aws_secret_access_key=AWSSECRETKEYEXAMPLEKEY
-         ```
+      ```bash
+      [default]
+      aws_access_key_id=AWSACCESSKEYEXAMPLE
+      aws_secret_access_key=AWSSECRETKEYEXAMPLEKEY
+      ```
 
 10. Everytime Certbot establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 80 and 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 80 and 443 port is occupied.
 
