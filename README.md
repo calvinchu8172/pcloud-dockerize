@@ -24,6 +24,10 @@
    
    6. `su - username`
    
+   7. If you want to change password for username, you need to login as the root user, type the following command to change password for username:
+   
+      1. `passwd username`  or `sudo passwd username`
+   
 2. Install Git
   
    1. [https://git-scm.com/book/zh-tw/v1/%E9%96%8B%E5%A7%8B-%E5%AE%89%E8%A3%9D-Git](https://git-scm.com/book/zh-tw/v1/開始-安裝-Git)
@@ -101,16 +105,19 @@
 
       1. `sudo apt-get update`
    2. `sudo apt-get install software-properties-common`
+     
       3. `sudo add-apt-repository universe`
    4. `sudo add-apt-repository ppa:certbot/certbot`
+     
       5. `sudo apt-get update`
    6. `sudo apt-get install certbot python-certbot-nginx`
-      7. `sudo apt-get install python3-certbot-dns-route53`
+     
+   7. `sudo apt-get install python3-certbot-dns-route53`
    
-   2. 
-   
+2. 
+  
    3. https://certbot-dns-route53.readthedocs.io/en/stable/
-
+   
    4. Log in AWS IAM consle to establish an AWS Key and paste the police:
    
       1. 
