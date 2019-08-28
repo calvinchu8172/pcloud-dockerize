@@ -193,10 +193,12 @@
 9. `docker-compose -f docker-compose-prod.yml pull sso`
 10. `docker-compose -f docker-compose-prod.yml run sso rake db:create db:migrate`
 11. `docker-compose -f docker-compose-prod.yml run sso rake xmpp:db:create xmpp:db:migrate`
-    1. **SSO** and **Portal** share the same DB, No need to do portal part.
+    1. **SSO** and **Portal** share the same DB, No need to do portal db migration.
 12. User database client (check below database client setting) Import previous database backup into `pcloud_portal_production` and `mongooseim_production`
-13. `docker-compose -f docker-compose-prod.yml run dureading rake db:create db:migrate db:seed`
-14. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate db:seed`
+13. `docker-compose -f docker-compose-prod.yml run dureading rake db:create db:migrate`
+    1. If you have `dureading_production` database backup, import into it. Otherwise, run `docker-compose -f docker-compose-prod.yml run dureading rake db:seed`
+14. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate`
+    1. If you have `pcstore_production` database backup, import into it. Otherwise, run `docker-compose -f docker-compose-prod.yml run pcstore rake db:seed`
 15. Addition actions for **Niginx** 
     1. `cd pcloud/nginx` 
     2. `sudo mkdir -p log/dureading log/pcstore log/portal log/sso`
