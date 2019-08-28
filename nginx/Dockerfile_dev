@@ -1,4 +1,5 @@
-FROM staticfloat/nginx-certbot
+# FROM staticfloat/nginx-certbot
+FROM nginx
 
 ENV LANG C.UTF-8
 # 指定時區，否則會用 GMT
@@ -12,20 +13,22 @@ WORKDIR $APP_HOME
 
 # create log directory
 RUN mkdir -p log/sso log/portal log/dureading log/pcstore
-RUN mkdir -p /etc/letsencrypt/live/{sso.lovefunthing.com,portal.lovefunthing.com,dureading.lovefunthing.com,pcstore.lovefunthing.com}
+# RUN mkdir -p /etc/letsencrypt/live/{sso.lovefunthing.com,portal.lovefunthing.com,dureading.lovefunthing.com,pcstore.lovefunthing.com}
 
 # copy over static assets
 COPY nginx/public public/
-COPY nginx/secret secret/
+# COPY nginx/secret secret/
 
-COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/sso.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/sso.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/portal.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/portal.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/dureading.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/dureading.lovefunthing.com/privkey.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/pcstore.lovefunthing.com/fullchain.pem
-COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/pcstore.lovefunthing.com/privkey.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/lovefunthing.com/fullchain.pem
+COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/lovefunthing.com/privkey.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/sso.lovefunthing.com/fullchain.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/sso.lovefunthing.com/privkey.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/portal.lovefunthing.com/fullchain.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/portal.lovefunthing.com/privkey.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/dureading.lovefunthing.com/fullchain.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/dureading.lovefunthing.com/privkey.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.crt /etc/letsencrypt/live/pcstore.lovefunthing.com/fullchain.pem
+# COPY nginx/secret/ssl_certificates/lovefunthing.com.key /etc/letsencrypt/live/pcstore.lovefunthing.com/privkey.pem
 
 
 COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx

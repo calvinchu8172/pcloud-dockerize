@@ -5,16 +5,36 @@
 ## Cloud Server Prerequisite
 
 1. Create user calvinchu(or other username) 
-   
+  
    1. https://www.digitalocean.com/community/tutorials/how-to-create-a-sudo-user-on-ubuntu-quickstart
    
-2. Install Git
+   2. `ssh root@server_ip_address`
    
+   3. `adduser username`
+   
+   4. 
+   
+      ```
+      Enter new UNIX password:
+      Retype new UNIX password:
+      passwd: password updated successfully
+      ```
+   
+   5. `usermod -aG sudo username`
+   
+   6. `su - username`
+   
+2. Install Git
+  
    1. [https://git-scm.com/book/zh-tw/v1/%E9%96%8B%E5%A7%8B-%E5%AE%89%E8%A3%9D-Git](https://git-scm.com/book/zh-tw/v1/開始-安裝-Git)
+   2. `sudo apt-get update`
+   3. `apt-get install libcurl4-gnutls-dev libexpat1-dev gettext \
+      libz-dev libssl-dev`
+   4. `apt-get install git`
    
 3. Edit `~/.gitconfig` under **calvinchu user**
 
-   1. https://gist.github.com/calvinchu8172/186bdb3a9266eb2dde20e5e9b649cb41
+   1. https://gist.githubsu.com/calvinchu8172/186bdb3a9266eb2dde20e5e9b649cb41
 
 4. Edit` ~/.bash_profile` under **calvinchu user**
 
@@ -24,52 +44,163 @@
 
    1. https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
+   2. `sudo apt-get update`
+
+   3. 
+
+      ```
+      sudo apt-get install \
+          apt-transport-https \
+          ca-certificates \
+          curl \
+          gnupg-agent \
+          software-properties-common
+      ```
+
+   4. `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
+
+   5. `sudo apt-key fingerprint 0EBFCD88`
+
+   6. 
+
+      ```
+      sudo add-apt-repository \
+         "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+         $(lsb_release -cs) \
+         stable"
+      ```
+
+   7. `sudo apt-get update`
+
+   8.  `sudo apt-get install docker-ce docker-ce-cli containerd.io`
+
 6. Add calvinchu to docker group
 
    1. https://docs.docker.com/install/linux/linux-postinstall/
+   2. `sudo groupadd docker`
+   3. `sudo usermod -aG docker calvinchu`
+   4. `newgrp docker`
+   5. `su - calvinchu` then run docker command `docker images` to verify that you can run `docker` commands without `sudo`.
 
 7. install docker-compose 
 
    1. https://docs.docker.com/compose/install/
+   2. `sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
+   3. `sudo chmod +x /usr/local/bin/docker-compose`
+   4. Test the installation. `docker-compose -v`
 
 8. Create SSH Key and paste public key to GitHub.
 
    1. https://help.github.com/en/articles/connecting-to-github-with-ssh
+   2. `ssh-keygen -t rsa -b 4096 -C "your_email@example.com`
+   3. Press enter saving to default `~/.ssh` folder under calvinchu account. No need to set password.
+   4. `cat ~/.ssh/id_rsa.pub` copy public key to GitHub ssh keys `https://github.com/settings/keys`.
 
 9. Install Cerbot(nginx, ubuntu 18.04 LTS) usign wildcard Route53 plugin
    1. https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx
 
-   2. https://certbot-dns-route53.readthedocs.io/en/stable/
+      1. `sudo apt-get update`
+   2. `sudo apt-get install software-properties-common`
+      3. `sudo add-apt-repository universe`
+   4. `sudo add-apt-repository ppa:certbot/certbot`
+      5. `sudo apt-get update`
+   6. `sudo apt-get install certbot python-certbot-nginx`
+      7. `sudo apt-get install python3-certbot-dns-route53`
+   
+   2. 
+   
+   3. https://certbot-dns-route53.readthedocs.io/en/stable/
 
-   3. https://caloskao.org/ubuntu-use-certbot-to-automatically-update-lets-encrypt-certificate-authority/
-
-   4. The  `~/.aws/config` of Route53 AWS access key is added under **root user**  folder.
-
+   4. Log in AWS IAM consle to establish an AWS Key and paste the police:
+   
+      1. 
+   
+         ```
+         {
+             "Version": "2012-10-17",
+             "Id": "certbot-dns-route53 sample policy",
+             "Statement": [
+                 {
+                     "Effect": "Allow",
+                     "Action": [
+                         "route53:ListHostedZones",
+                         "route53:GetChange"
+                     ],
+                     "Resource": [
+                         "*"
+                     ]
+                 },
+                 {
+                     "Effect" : "Allow",
+                     "Action" : [
+                         "route53:ChangeResourceRecordSets"
+                     ],
+                     "Resource" : [
+                         "arn:aws:route53:::hostedzone/YOURHOSTEDZONEID"
+                     ]
+                 }
+             ]
+         }
+         ```
+   
+         
+   
+   5. The  `~/.aws/config` of Route53 AWS access key is added under **root user**  folder.
+   
       ```bash
       [default]
       aws_access_key_id=AWSACCESSKEYEXAMPLE
       aws_secret_access_key=AWSSECRETKEYEXAMPLEKEY
       ```
-
-10. Everytime Certbot establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 80 and 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 80 and 443 port is occupied.
+   
+      
+   
+   6. 
+   
+      ```
+      certbot certonly \
+        --dns-route53 \
+        -d example.com \
+        -d www.example.com
+      ```
+   
+   7. The SSL Certificates are saved at `/etc/letsencrypt/live/example.com/`
+   
+   8. Test automatic renewal.
+   
+      1. `sudo certbot renew --dry-run`
+   
+   9. Certbot will activate the original Nginx and we will use Nginx Docker. So we have to turn of original Nginx.
+   
+      1. `sudo netstat -plntu` check if 80 and 443 port are occupied by original Nginx.
+      2. `sudo service nginx stop` if not work then you have to reboot VPS then try the directive again.
+   
+   10. https://caloskao.org/ubuntu-use-certbot-to-automatically-update-lets-encrypt-certificate-authority/
+   
+   11. Everytime Certbot establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 80 and 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 80 and 443 port is occupied.
+   
 
 ## Deploy Sequence:
 
-1. `mkdir Docker/pcloud` under calvinchu `/home` folder.
-2. enter pcloud folder `cd Docker/pcloud`
-2. Add .env file `touch .env`  and modify `.env`
-3. Copy environment variables and paste in `.env` file. 
-5. `docker-compose -f docker-compose-prod.yml pull sso`
-6. `docker-compose -f docker-compose-prod.yml run sso rake db:create db:migrate`
-7. `docker-compose -f docker-compose-prod.yml run sso rake xmpp:db:create xmpp:db:migrate`
-   1. **SSO** and **Portal** share the same DB, No need to do portal part.
-8. User database client (check below database client setting) Import previous database backup into `pcloud_portal_production` and `mongooseim_production`
-9. `docker-compose -f docker-compose-prod.yml run dureading rake db:create db:migrate db:seed`
-10. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate db:seed`
-11. Addition actions for **Niginx** 
+1. `mkdir Docker` under calvinchu `/home` folder.
+2. `git clone git@github.com:calvinchu8172/pcloud-dockerize.git`
+3. `mv pcloud-dockerize pcloud`
+4. enter pcloud folder `cd Docker/pcloud`
+5. Add .env file `touch .env_db`  and modify `.env_db`
+6. Copy environment variables and paste in `.env_db` file. 
+7. Add .env file `touch .env`  and modify `.env`
+8. Copy environment variables and paste in `.env` file. 
+9. `docker-compose -f docker-compose-prod.yml pull sso`
+10. `docker-compose -f docker-compose-prod.yml run sso rake db:create db:migrate`
+11. `docker-compose -f docker-compose-prod.yml run sso rake xmpp:db:create xmpp:db:migrate`
+    1. **SSO** and **Portal** share the same DB, No need to do portal part.
+12. User database client (check below database client setting) Import previous database backup into `pcloud_portal_production` and `mongooseim_production`
+13. `docker-compose -f docker-compose-prod.yml run dureading rake db:create db:migrate db:seed`
+14. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate db:seed`
+15. Addition actions for **Niginx** 
     1. `cd pcloud/nginx` 
     2. `sudo mkdir -p log/dureading log/pcstore log/portal log/sso`
-12. `docker-compose -f docker-compose-prod.yml up`
+16. `docker-compose -f docker-compose-prod.yml up`
 
 ## Cerbot (currently using wildcard, this is no need.)
 

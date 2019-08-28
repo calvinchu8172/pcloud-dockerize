@@ -1,4 +1,5 @@
-FROM staticfloat/nginx-certbot
+# FROM staticfloat/nginx-certbot
+FROM nginx
 
 ENV LANG C.UTF-8
 # 指定時區，否則會用 GMT
