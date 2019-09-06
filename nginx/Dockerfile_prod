@@ -1,4 +1,3 @@
-# FROM staticfloat/nginx-certbot
 FROM nginx
 
 ENV LANG C.UTF-8
@@ -12,22 +11,22 @@ ENV APP_HOME /home/app/rails-app
 WORKDIR $APP_HOME
 
 # create log directory
-RUN mkdir -p log/sso log/portal log/dureading log/pcstore
+RUN mkdir -p log/sso log/portal log/dureading log/pcstore log/profile
 
 # copy over static assets
 COPY nginx/public public/
 
-# COPY nginx/sso.local.conf /tmp/docker.nginx
 COPY nginx/sso.lovefunthing.com.conf /tmp/sso.nginx
 COPY nginx/portal.lovefunthing.com.conf /tmp/portal.nginx
 COPY nginx/dureading.lovefunthing.com.conf /tmp/dureading.nginx
 COPY nginx/pcstore.lovefunthing.com.conf /tmp/pcstore.nginx
+COPY nginx/profile.lovefunthing.com.conf /tmp/profile.nginx
 
-# COPY nginx/sso.local.conf /etc/nginx/conf.d/nginx.conf
 RUN envsubst '$APP_HOME' < /tmp/sso.nginx > /etc/nginx/conf.d/sso.lovefunthing.com.conf
 RUN envsubst '$APP_HOME' < /tmp/portal.nginx > /etc/nginx/conf.d/portal.lovefunthing.com.conf
 RUN envsubst '$APP_HOME' < /tmp/dureading.nginx > /etc/nginx/conf.d/dureading.lovefunthing.com.conf
 RUN envsubst '$APP_HOME' < /tmp/pcstore.nginx > /etc/nginx/conf.d/pcstore.lovefunthing.com.conf
+RUN envsubst '$APP_HOME' < /tmp/profile.nginx > /etc/nginx/conf.d/profile.lovefunthing.com.conf
 
 EXPOSE 80
 

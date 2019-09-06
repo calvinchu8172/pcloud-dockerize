@@ -6,5 +6,11 @@ mongooseim/log
 mongooseim/mnesia
 mongooseim/config/ejabberd.cfg
 mysql
+profile
+pcstore
+dureading
+pcloud-sso
+pcloud-portal
+pcloud-bots
 redis
 !README.md
