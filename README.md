@@ -206,11 +206,9 @@
     1. If you have `dureading_production` database backup, import into it. Otherwise, run `docker-compose -f docker-compose-prod.yml run dureading rake db:seed`
 14. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate`
     1. If you have `pcstore_production` database backup, import into it. Otherwise, run `docker-compose -f docker-compose-prod.yml run pcstore rake db:seed`
-15. `docker-compose -f docker-compose-prod.yml run profile rake db:create db:migrate`
-    1. If you have `profile_production` database backup, import into it. Otherwise, run `docker-compose -f docker-compose-prod.yml run profile rake db:seed`
 16. Addition actions for **Niginx** 
     1. `cd pcloud/nginx` 
-    2. `sudo mkdir -p log/dureading log/pcstore log/portal log/sso log/profile`
+    2. `sudo mkdir -p log/dureading log/pcstore log/portal log/sso`
 17. `docker-compose -f docker-compose-prod.yml up`
 
 ## Cerbot (currently using wildcard, this is no need.)
