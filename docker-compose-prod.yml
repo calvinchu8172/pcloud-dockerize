@@ -96,21 +96,6 @@ services:
       - db
       - redis
       - mongooseim    
-  profile:
-    # build:
-    #   context: .
-    #   dockerfile: ./profile/Dockerfile
-    image: calvinchu/profile-dockerize
-    container_name: profile
-    command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && sh ./start.sh"
-    env_file: .env
-    volumes:
-      - ./profile/log:/home/app/rails-app/log
-      - /tmp/unicorn:/tmp/unicorn
-    restart: on-failure
-    depends_on:
-      - db
-      - nginx
   nginx:
     build:
       context: .
