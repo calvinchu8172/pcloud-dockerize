@@ -24,7 +24,7 @@ services:
     #   dockerfile: ./pcloud-sso/Dockerfile
     image: calvinchu/pcloud-sso-dockerize
     container_name: sso
-    command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
+    command: bash -c "rm -f tmp/pids/server.pid unicorn.pid && dockerize -wait tcp://db:3306 -timeout 1m && bundle exec unicorn -p 3000 -c config/unicorn/production.rb"
     env_file: .env
     volumes:
       - ./pcloud-sso/log:/home/app/rails-app/log
@@ -40,7 +40,7 @@ services:
     #   dockerfile: ./pcloud-portal/Dockerfile
     image: calvinchu/pcloud-portal-dockerize
     container_name: portal
-    command: bash -c "rm -f tmp/pids/server.pid && dockerize -wait tcp://db:3306 -timeout 1m && sh ./start.sh"
+    command: bash -c "rm -f tmp/pids/server.pid unicorn.pid && dockerize -wait tcp://db:3306 -timeout 1m && sh ./start.sh"
     env_file: .env
     volumes:
       - ./pcloud-portal/log:/home/app/rails-app/log
@@ -95,7 +95,7 @@ services:
     depends_on:
       - db
       - redis
-      - mongooseim    
+      - mongooseim
   nginx:
     build:
       context: .
