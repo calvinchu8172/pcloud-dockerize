@@ -186,7 +186,20 @@
    
    11. Everytime Certbot establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 80 and 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 80 and 443 port is occupied.
    
-   12. Config UFW(Uncomplicated Firewall), Linux sever should be installed defaultly.
+   12. Start Docker
+   
+       1. `docker-compose -f docker-compose-prod.yml down`
+       2. `docker-compose -f docker-compose-prod.yml build`
+       3. `docker-compose -f docker-compose-prod.yml run sso rake db:create`
+          1. SSO and Portal use the same DB migrate, so also can execute Portal migration `docker-compose -f docker-compose-prod.yml run portal rake db:create` and so are the following directives.
+       4. `docker-compose -f docker-compose-prod.yml run sso rake xmpp:db:create`
+       5. `docker-compose -f docker-compose-prod.yml run sso rake db:migrate`
+       6. `docker-compose -f docker-compose-prod.yml run sso rake xmpp:db:migrate`
+    7. `docker-compose -f docker-compose-prod.yml run pcstore rake db:create db:migrate db:seed`
+       8. `docker-compose -f docker-compose-prod.yml run dureading rake db:create db:migrate db:seed`
+       9. `docker-compose -f docker-compose-prod.yml up `
+       
+   13. Config UFW(Uncomplicated Firewall), Linux sever should be installed defaultly.
    
        1. Make sure SSH port MUST be allowed, otherwise UFW will block you accessing server.
           ```bash
@@ -194,18 +207,18 @@
           ```
           
        2. Allow 80 and 443 port
-       
-       ```bash
+   
+          ```bash
           sudo ufw allow 80 # Allow port 80
           sudo ufw allow 443 # Allow port 443
           ```
-       
+   
        3. Check the setting.
-       
+   
           ```bash
           sudo ufw status numbered
           ```
-       
+   
           ```bash
           Numbered Output:
           Status: active
@@ -216,20 +229,20 @@
           [ 2] 80                         ALLOW IN    Anywhere
           [ 3] 443                        ALLOW IN    Anywhere
           ```
-       
+   
        4. Enable UFW.
-       
+   
           ```bash
           sudo ufw enable # Enable firewall
           sudo ufw disable # Disable firewall
           ```
-       
+   
        5. Reset UFW setting if needed.
-       
+   
           ```bash
           sudo ufw reset
           ```
-       
+   
           
    
    
