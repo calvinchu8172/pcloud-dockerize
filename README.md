@@ -52,7 +52,7 @@
 
    3. 
 
-      ```
+      ```bash
       sudo apt-get install \
           apt-transport-https \
           ca-certificates \
@@ -67,7 +67,7 @@
 
    6. 
 
-      ```
+      ```bash
       sudo add-apt-repository \
          "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
          $(lsb_release -cs) \
@@ -122,7 +122,7 @@
    
       1. 
    
-         ```
+         ```json
          {
              "Version": "2012-10-17",
              "Id": "certbot-dns-route53 sample policy",
@@ -164,7 +164,7 @@
    
    6. 
    
-      ```
+      ```bash
       certbot certonly \
         --dns-route53 \
         -d example.com \
@@ -185,6 +185,54 @@
    10. https://caloskao.org/ubuntu-use-certbot-to-automatically-update-lets-encrypt-certificate-authority/
    
    11. Everytime Certbot establish new domain, please reboot server and `service nginx stop` to stop original nginx service of server. Because the original nginx will occupy 80 and 443 port. That will cause Docker nginx start error. You can excute `sudo netstat -plntu` to check if 80 and 443 port is occupied.
+   
+   12. Config UFW(Uncomplicated Firewall), Linux sever should be installed defaultly.
+   
+       1. Make sure SSH port MUST be allowed, otherwise UFW will block you accessing server.
+          ```bash
+          sudo ufw allow ssh # Allow ssh port 22
+          ```
+          
+       2. Allow 80 and 443 port
+       
+       ```bash
+          sudo ufw allow 80 # Allow port 80
+          sudo ufw allow 443 # Allow port 443
+          ```
+       
+       3. Check the setting.
+       
+          ```bash
+          sudo ufw status numbered
+          ```
+       
+          ```bash
+          Numbered Output:
+          Status: active
+          
+               To                         Action      From
+               --                         ------      ----
+          [ 1] 22                         ALLOW IN    Anywhere
+          [ 2] 80                         ALLOW IN    Anywhere
+          [ 3] 443                        ALLOW IN    Anywhere
+          ```
+       
+       4. Enable UFW.
+       
+          ```bash
+          sudo ufw enable # Enable firewall
+          sudo ufw disable # Disable firewall
+          ```
+       
+       5. Reset UFW setting if needed.
+       
+          ```bash
+          sudo ufw reset
+          ```
+       
+          
+   
+   
    
 
 ## Deploy Sequence:
